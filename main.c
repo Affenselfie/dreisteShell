@@ -8,6 +8,10 @@ int main(int argc, char *argv) {
 
     FILE *f =fopen("./log", "a");
 
+    if(f==NULL){
+        return 1;
+    }
+
     while (1) {
 
 
