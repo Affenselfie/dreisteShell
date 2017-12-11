@@ -1,28 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <time.h>
 
 #define MAX_LENGTH  512
 
 int main(int argc, char *argv) {
     char line[MAX_LENGTH];
 
-    FILE *f = fopen("./log", "a");
+    FILE *f = NULL;
 
-    if (f == NULL) {
-        return 1;
-    }
+    int result = 0;
+    for(int i = 0;i<256;i++) {
 
-    int *test = malloc(sizeof(int));
+        f = fopen("./log", "a");
+        if (f == NULL) return 1;
 
-
-    int result = fputs("LOG_START\n", f);
-    if (result < 0) return 1;
-
-    int accessCount = 0;
-    while (1) {
-        accessCount++;
-
+	if(i == 0) {
+	    time_t t;
+	    time(&t);
+	    result = fputs("LOG_START\n", f);
+   	    if (result < 0) return 1;
+	    result = fputs(ctime(&t), f);
+   	    if (result < 0) return 1;
+	}
 
         printf("$ ");
         if (!fgets(line, MAX_LENGTH, stdin)) break;
@@ -30,23 +30,9 @@ int main(int argc, char *argv) {
         result = fputs(line, f);
         if (result < 0) return 1;
 
-
         fclose(f);
-
-
-        f = fopen("./log", "a");
-        if (f == NULL) return 1;
-
-
-        if (accessCount > 256) {
-            fclose(f);
-
-            return 0;
-        }
-
     }
 
     fclose(f);
-
     return 0;
 }
