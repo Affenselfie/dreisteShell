@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 
-
 #define MAX_LENGTH  512
 
 int main(int argc, char *argv) {
@@ -14,6 +13,12 @@ int main(int argc, char *argv) {
         return 1;
     }
 
+    int *test = malloc(sizeof(int));
+
+
+    int result = fputs("LOG_START\n", f);
+    if (result < 0) return 1;
+
     int accessCount = 0;
     while (1) {
         accessCount++;
@@ -22,20 +27,18 @@ int main(int argc, char *argv) {
         printf("$ ");
         if (!fgets(line, MAX_LENGTH, stdin)) break;
 
-        int result = fputs(line, f);
-
+        result = fputs(line, f);
         if (result < 0) return 1;
 
-        if (accessCount % 5 == 0) {
-            fclose(f);
-            f == NULL;
 
-            f = fopen("./log", "a");
-            if (f == NULL) return 1;
+        fclose(f);
 
 
+        f = fopen("./log", "a");
+        if (f == NULL) return 1;
 
-        } else if (accessCount > 256) {
+
+        if (accessCount > 256) {
             fclose(f);
 
             return 0;
@@ -43,7 +46,7 @@ int main(int argc, char *argv) {
 
     }
 
-    if (f != NULL) fclose(f);
+    fclose(f);
 
     return 0;
 }
