@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <signal.h>
 #include <string.h>
+#include <signal.h>
 
 #define MAX_LENGTH 512
 
@@ -26,8 +26,6 @@ int main(int argc, char *argv) {
     result = fputs("LOG_START\n", f);
     if (result < 0) return 1;
     result = fputs(ctime(t), f);
-    free(t);
-    t = NULL;
     if (result < 0) return 1;
 
 
@@ -38,7 +36,7 @@ int main(int argc, char *argv) {
         if (result < 0) return 1;
 
         int comp_result = strcmp(line, "exit\n");
-        if (comp_result == 0) return 0;
+        if (comp_result == 0) break;
 
         printf("$ ");
     }
