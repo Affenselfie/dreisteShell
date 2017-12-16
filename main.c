@@ -3,6 +3,8 @@
 #include <time.h>
 #include <string.h>
 #include <signal.h>
+#include <pwd.h>
+#include <unistd.h>
 
 #define MAX_LENGTH 512
 
@@ -13,6 +15,11 @@ int result = 0;
 
 int main(int argc, char *argv) {
     char line[MAX_LENGTH];
+    register struct passwd *pw;
+    register uid_t uid;
+
+    uid = geteuid ();
+    pw = getpwuid (uid);
 
     //Register SIGINTHANDLER
      signal(SIGINT, SIGINTHandler);
@@ -29,7 +36,7 @@ int main(int argc, char *argv) {
     if (result < 0) return 1;
 
 
-    printf("$ ");
+    printf("[%s@%s] $ ", pw->pw_name, "hostname");
     // "Fake" Terminal and log input
     while(fgets(line, MAX_LENGTH, stdin) != NULL) {
         result = fputs(line, f);
@@ -38,7 +45,7 @@ int main(int argc, char *argv) {
         int comp_result = strcmp(line, "exit\n");
         if (comp_result == 0) break;
 
-        printf("$ ");
+        printf("[%s@%s] $ ", pw->pw_name, "hostname");
     }
 
     time(t);
