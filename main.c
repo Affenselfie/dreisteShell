@@ -36,7 +36,7 @@ int main(int argc, char *argv) {
     if (result < 0) return 1;
 
 
-    printf("[%s@%s] $ ", pw->pw_name, "hostname");
+    printf("[%s@%s %s] $ ", pw->pw_name, "hostname", "~");
     // "Fake" Terminal and log input
     while(fgets(line, MAX_LENGTH, stdin) != NULL) {
         result = fputs(line, f);
@@ -45,7 +45,7 @@ int main(int argc, char *argv) {
         int comp_result = strcmp(line, "exit\n");
         if (comp_result == 0) break;
 
-        printf("[%s@%s] $ ", pw->pw_name, "hostname");
+        printf("[%s@%s %s] $ ", pw->pw_name, "hostname", "~");
     }
 
     time(t);
